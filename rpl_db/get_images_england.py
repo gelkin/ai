@@ -13,7 +13,7 @@ except ImportError:
 folder_0 = "1000"
 folder_1 = "2000"
 
-def download_players_rpl():
+def download_players():
     dire_0 = folder_0
     if not os.path.exists(dire_0):
         os.mkdir(dire_0)
@@ -52,39 +52,11 @@ def download_players_rpl():
             rn = cells[1].get_text()
             print(rn)
 
-def train_valid():
-    pass
-
-def split_test_train():
-    from sklearn.model_selection import train_test_split
-    X = []
-    y = []
-
-    for f in os.listdir(folder_0):
-        X.append(f)
-        y.append(folder_0)
-    for f in os.listdir(folder_1):
-        X.append(f)
-        y.append(folder_1)
-
-    print(X[:10])
-    print(y[:10])
-
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=1)
-    print(len(X_train))
-    print(len(y_train))
-
-    def copy_to_dir(dir_name, X, y):
-        if not os.path.exists(dir_name):
-            os.mkdir(dir_name)
-        if not os.path.exists(dir_name + "/" + folder_0):
-            os.mkdir(dir_name + "/" + folder_0)
-        if not os.path.exists(dir_name + "/" + folder_1):
-            os.mkdir(dir_name + "/" + folder_1)
-
-        for x_row, y_row in zip(X, y):
-            filename = y_row + "/" + x_row
-            copyfile(filename, dir_name + "/" + filename)
-
-    copy_to_dir("train", X_train, y_train)
-    copy_to_dir("valid", X_val, y_val)
+url_epl = 'https://www.premierleague.com/players'
+response = urllib.request.urlopen(url_epl)
+webContent = response.read()
+html = webContent
+print(html[:10])
+parsed_html = BeautifulSoup(html, "html5lib")
+table = parsed_html.body.find('div', attrs={'class':'table playerIndex'})
+print(table)
